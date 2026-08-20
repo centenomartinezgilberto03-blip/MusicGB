@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="musicgb_green">#1DB954</color>
+    <color name="musicgb_dark">#121212</color>
+    <color name="musicgb_light">#FFFFFF</color>
+    <color name="musicgb_gray">#B3B3B3</color>
+</resources>
