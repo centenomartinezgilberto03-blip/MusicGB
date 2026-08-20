@@ -1,4 +1,4 @@
-# MisicGB - Reproductor de Música Avanzado
+# MusicGB - Reproductor de Música Avanzado
 
 ## 🎵 Especificaciones
 
@@ -36,10 +36,11 @@
 - Pantalla completa "Ahora reproduciendo"
 - Visualizador de espectro
 - Tema oscuro/claro
-- Nombre: MisicGB
+- Nombre: MusicGB
 
 ### Privacidad
 - 100% offline
 - Sin analytics, ads ni telemetría
 - Sin permisos de red
 - Permiso único: READ_MEDIA_AUDIO
+

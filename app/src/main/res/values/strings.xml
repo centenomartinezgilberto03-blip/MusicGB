@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">MisicGB</string>
+    <string name="app_name">MusicGB</string>
     <string name="tab_library">Biblioteca</string>
     <string name="tab_albums">Álbumes</string>
     <string name="tab_artists">Artistas</string>
@@ -10,3 +10,4 @@
     <string name="effects">Efectos DSP</string>
     <string name="settings">Ajustes</string>
 </resources>
+

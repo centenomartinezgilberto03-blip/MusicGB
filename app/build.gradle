@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'com.misicgb.player'
+    namespace 'com.musicgb.player'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.misicgb.player"
+        applicationId "com.musicgb.player"
         minSdk 26
         targetSdk 34
         versionCode 1
@@ -41,3 +41,4 @@ dependencies {
     implementation 'androidx.room:room-runtime:2.6.0'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3'
 }
+
