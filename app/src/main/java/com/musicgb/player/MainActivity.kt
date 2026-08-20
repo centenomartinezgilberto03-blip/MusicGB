@@ -1,13 +1,13 @@
 package com.musicgb.player
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import android.app.Activity
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.graphics.Color
 import android.view.Gravity
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val rootLayout = LinearLayout(this).apply {
@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
         val titleText = TextView(this).apply {
             text = "MusicGB"
             textSize = 32f
-            setTextColor(Color.WHITE)
+            setTextColor(Color.parseColor("#1DB954"))
             gravity = Gravity.CENTER
         }
         rootLayout.addView(titleText)
