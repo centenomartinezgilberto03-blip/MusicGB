@@ -19,7 +19,7 @@
         </activity>
         
         <service
-            android:name=".audio.PlaybackService"
+            android:name=".audio.MusicPlayerService"
             android:exported="false" />
     </application>
 </manifest>

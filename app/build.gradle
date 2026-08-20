@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
 }
 
 repositories {
@@ -30,8 +31,45 @@ android {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
+    
+    kotlinOptions {
+        jvmTarget = '17'
+    }
 }
 
 dependencies {
+    // Core
     implementation 'androidx.core:core-ktx:1.12.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.11.0'
+    implementation 'androidx.recyclerview:recyclerview:1.3.2'
+    implementation 'androidx.viewpager2:viewpager2:1.0.0'
+    implementation 'androidx.fragment:fragment-ktx:1.6.2'
+    
+    // Media3/ExoPlayer
+    implementation 'androidx.media3:media3-exoplayer:1.2.0'
+    implementation 'androidx.media3:media3-session:1.2.0'
+    implementation 'androidx.media3:media3-common:1.2.0'
+    implementation 'androidx.media3:media3-datasource:1.2.0'
+    implementation 'androidx.media3:media3-decoder:1.2.0'
+    
+    // Audio Processing
+    implementation 'com.google.android.exoplayer:extension-flac:2.19.1'
+    implementation 'com.google.android.exoplayer:extension-opus:2.19.1'
+    implementation 'com.github.TianTianBigWang:SoundTouch:1.0.2'
+    
+    // Room Database
+    implementation 'androidx.room:room-runtime:2.6.0'
+    implementation 'androidx.room:room-ktx:2.6.0'
+    kapt 'androidx.room:room-compiler:2.6.0'
+    
+    // Coroutines
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3'
+    
+    // Visualizer
+    implementation 'androidx.media:media:1.7.0'
+    
+    // JSON
+    implementation 'com.google.code.gson:gson:2.10.1'
 }
