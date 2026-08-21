@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#121212">
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+        
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="ECUALIZADOR 32 BANDAS"
+            android:textSize="20sp"
+            android:textColor="#1DB954"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:padding="16dp"/>
+        
+        <!-- Contenedor de bandas verticales -->
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:scrollbars="horizontal">
+            
+            <LinearLayout
+                android:id="@+id/eqBandsContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:padding="8dp"
+                android:gravity="center_vertical"/>
+        </HorizontalScrollView>
+        
+        <!-- Presets -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="PRESETS"
+            android:textSize="16sp"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:padding="16dp"/>
+        
+        <LinearLayout
+            android:id="@+id/presetContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"/>
+        
+        <!-- Controles adicionales -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="CONTROLES"
+            android:textSize="16sp"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:padding="16dp"/>
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Preamp"
+                android:textColor="#B3B3B3"/>
+            
+            <SeekBar
+                android:id="@+id/preampSeekBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:max="24"
+                android:progress="12"/>
+            
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Bass Boost"
+                android:textColor="#B3B3B3"
+                android:paddingTop="16dp"/>
+            
+            <SeekBar
+                android:id="@+id/bassSeekBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:max="1000"
+                android:progress="0"/>
+            
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Treble Boost"
+                android:textColor="#B3B3B3"
+                android:paddingTop="16dp"/>
+            
+            <SeekBar
+                android:id="@+id/trebleSeekBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:max="1000"
+                android:progress="0"/>
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

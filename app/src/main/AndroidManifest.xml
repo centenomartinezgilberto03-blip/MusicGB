@@ -18,6 +18,14 @@
             </intent-filter>
         </activity>
         
+        <activity
+            android:name=".EqualizerActivity"
+            android:exported="false" />
+        
+        <activity
+            android:name=".HiResSettingsActivity"
+            android:exported="false" />
+        
         <service
             android:name=".audio.MusicPlayerService"
             android:exported="false" />
