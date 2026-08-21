@@ -19,5 +19,7 @@ data class Track(
     val bitrate: Int,
     val sampleRate: Int,
     val isFavorite: Boolean = false,
-    val albumArtPath: String? = null
+    val albumArtPath: String? = null,
+    val replayGainTrack: Float = 0f,
+    val replayGainAlbum: Float = 0f
 )

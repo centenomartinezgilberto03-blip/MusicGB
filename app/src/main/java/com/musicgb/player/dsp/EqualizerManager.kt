@@ -1,53 +1,72 @@
 package com.musicgb.player.dsp
 
-import android.media.audiofx.Equalizer
+import android.media.audiofx.DynamicsProcessing
 import android.util.Log
 
 class EqualizerManager(audioSessionId: Int) {
-    
+
     companion object {
-        const val NUM_BANDS = 32
         const val TAG = "EqualizerManager"
+        const val NUM_BANDS = 10
     }
-    
-    private var equalizer: Equalizer? = null
-    
-    private val frequencies = floatArrayOf(
-        20f, 31f, 45f, 63f, 88f, 125f, 175f, 250f,
-        350f, 500f, 700f, 1000f, 1400f, 2000f, 2800f, 4000f,
-        5600f, 8000f, 10000f, 12000f, 14000f, 16000f, 18000f, 20000f,
-        12500f, 15000f, 17500f, 20000f, 22000f, 25000f, 28000f, 32000f
-    )
-    
+
+    private var dynamicsProcessing: DynamicsProcessing? = null
+    private val frequencies = floatArrayOf(32f, 64f, 125f, 250f, 500f, 1000f, 2000f, 4000f, 8000f, 16000f)
+    private val gains = FloatArray(NUM_BANDS) { 0f }
+
     init {
         try {
-            equalizer = Equalizer(0, audioSessionId).apply {
+            val config = DynamicsProcessing.Config.Builder(
+                DynamicsProcessing.VARIANT_FAVOR_FREQUENCY_RESOLUTION,
+                2, true, NUM_BANDS, true, NUM_BANDS, true, 0, true
+            ).build()
+
+            dynamicsProcessing = DynamicsProcessing(0, audioSessionId, config).apply {
                 enabled = true
             }
+
+            for (i in 0 until NUM_BANDS) {
+                setBandGain(i, 0f)
+            }
         } catch (e: Exception) {
-            Log.e(TAG, "Equalizer not supported: ${e.message}")
+            Log.e(TAG, "DynamicsProcessing no disponible: ${e.message}")
         }
     }
-    
+
     fun setBandGain(band: Int, gainDb: Float) {
+        if (band < 0 || band >= NUM_BANDS) return
+        gains[band] = gainDb.coerceIn(-12f, 12f)
         try {
-            equalizer?.setBandLevel(band.toShort(), (gainDb * 1000).toInt().toShort())
-        } catch (e: Exception) {}
+            dynamicsProcessing?.let { dp ->
+                val eq = dp.getPreEqBandByChannelIndex(0, band)
+                eq?.cutoffFrequency = frequencies[band]
+                eq?.gain = gains[band]
+                dp.setPreEqBandAllChannelsTo(band, eq)
+                dp.getPreEqBandByChannelIndex(1, band)?.let { eq2 ->
+                    eq2.cutoffFrequency = frequencies[band]
+                    eq2.gain = gains[band]
+                    dp.setPreEqBandAllChannelsTo(band, eq2)
+                }
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Error setBandGain: ${e.message}")
+        }
     }
-    
-    fun setAllBands(gains: FloatArray) {
-        gains.forEachIndexed { index, gain -> setBandGain(index, gain) }
-    }
-    
-    fun getBandGain(band: Int): Float {
-        return try { equalizer?.getBandLevel(band.toShort())?.toFloat()?.div(1000) ?: 0f } catch (e: Exception) { 0f }
-    }
-    
+
+    fun getBandGain(band: Int): Float = if (band in 0 until NUM_BANDS) gains[band] else 0f
     fun getFrequencies(): FloatArray = frequencies
-    fun setBassBoost(strength: Float) { for (i in 0 until 8) setBandGain(i, strength * (1 - i * 0.1f)) }
-    fun setTrebleBoost(strength: Float) { for (i in 24 until 32) setBandGain(i, strength * ((i - 23) * 0.1f)) }
-    fun setPreamp(gainDb: Float) { equalizer?.let { eq -> for (i in 0 until eq.numberOfBands) eq.setBandLevel(i.toShort(), (gainDb * 1000).toInt().toShort()) } }
-    fun enable() { equalizer?.enabled = true }
-    fun disable() { equalizer?.enabled = false }
-    fun release() { try { equalizer?.release() } catch (e: Exception) {} }
+    fun getNumBands(): Int = NUM_BANDS
+
+    fun setPreamp(gainDb: Float) {
+        try {
+            dynamicsProcessing?.setInputGainAllChannelsTo(gainDb.coerceIn(-12f, 12f))
+        } catch (e: Exception) { Log.e(TAG, "Error preamp: ${e.message}") }
+    }
+
+    fun enable() { dynamicsProcessing?.enabled = true }
+    fun disable() { dynamicsProcessing?.enabled = false }
+
+    fun release() {
+        try { dynamicsProcessing?.release() } catch (e: Exception) {}
+    }
 }

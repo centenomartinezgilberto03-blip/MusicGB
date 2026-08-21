@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
@@ -15,7 +15,7 @@
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@android:style/Theme.Material.NoActionBar">
+        android:theme="@style/Theme.MusicGB">
 
         <activity
             android:name=".MainActivity"
@@ -27,8 +27,20 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".EqualizerActivity" android:exported="false" />
-        <activity android:name=".HiResSettingsActivity" android:exported="false" />
+        <activity
+            android:name=".NowPlayingActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".EqualizerActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".HiResSettingsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
 
         <service
             android:name=".audio.MusicPlayerService"

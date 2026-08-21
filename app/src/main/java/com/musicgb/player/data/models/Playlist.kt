@@ -8,5 +8,5 @@ data class Playlist(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val name: String,
     val trackIds: String,
-    val dateCreated: Long
+    val dateCreated: Long = System.currentTimeMillis()
 )

@@ -2,4 +2,8 @@
 <resources>
     <color name="ic_launcher_background">#121212</color>
     <color name="musicgb_green">#1DB954</color>
+    <color name="musicgb_dark">#121212</color>
+    <color name="musicgb_surface">#282828</color>
+    <color name="musicgb_text_primary">#FFFFFF</color>
+    <color name="musicgb_text_secondary">#B3B3B3</color>
 </resources>
