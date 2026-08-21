@@ -22,8 +22,13 @@ jobs:
         
       - name: Build APK
         run: |
-          cd 
+          echo "Directorio actual:"
+          pwd
+          echo "Archivos:"
+          ls -la
+          echo "Ejecutando gradle wrapper..."
           gradle wrapper --gradle-version 8.2
+          echo "Compilando..."
           ./gradlew assembleRelease
           
       - name: Upload APK
