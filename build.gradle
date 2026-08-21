@@ -1,10 +1,1 @@
-buildscript {
-    repositories {
-        google()
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:8.2.0'
-        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.20'
-    }
-}
+﻿// Root build.gradle - todo movido a settings.gradle y plugins en app/build.gradle

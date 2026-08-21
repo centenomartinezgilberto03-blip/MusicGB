@@ -1,4 +1,4 @@
-package com.musicgb.player
+﻿package com.musicgb.player
 
 import android.Manifest
 import android.content.ComponentName
@@ -10,7 +10,6 @@ import android.os.Bundle
 import android.os.IBinder
 import android.provider.MediaStore
 import android.widget.Button
-import android.widget.LinearLayout
 import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
@@ -25,20 +24,21 @@ import com.musicgb.player.dsp.PresetManager
 import com.musicgb.player.ui.adapters.TrackAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import android.view.Gravity
-import android.graphics.Color
+import kotlinx.coroutines.delay
 
 class MainActivity : AppCompatActivity() {
-    
+
     private var musicService: MusicPlayerService? = null
     private var isBound = false
     private lateinit var trackAdapter: TrackAdapter
     private lateinit var presetManager: PresetManager
     private val REQUEST_PERMISSION = 100
     private var currentTracks = mutableListOf<Track>()
-    
+    private var progressJob: Job? = null
+
     private val connection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             val binder = service as MusicPlayerService.MusicBinder
@@ -50,26 +50,23 @@ class MainActivity : AppCompatActivity() {
             musicService = null
         }
     }
-    
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        
+
         presetManager = PresetManager(this)
-        
-        // Configurar RecyclerView
+
         val trackList = findViewById<RecyclerView>(R.id.trackList)
         trackList.layoutManager = LinearLayoutManager(this)
         trackAdapter = TrackAdapter(emptyList()) { track -> playTrack(track) }
         trackList.adapter = trackAdapter
-        
-        // Botones
+
         findViewById<Button>(R.id.scanButton).setOnClickListener { requestPermissionAndScan() }
         findViewById<Button>(R.id.playPauseButton).setOnClickListener { musicService?.togglePlayPause() }
-        findViewById<Button>(R.id.eqButton).setOnClickListener { showEqualizerUI() }
+        findViewById<Button>(R.id.eqButton).setOnClickListener { openEqualizer() }
         findViewById<Button>(R.id.dspButton).setOnClickListener { showDSPUI() }
-        
-        // SeekBar de progreso
+
         findViewById<SeekBar>(R.id.progressBar).setOnSeekBarChangeListener(
             object : SeekBar.OnSeekBarChangeListener {
                 override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
@@ -83,27 +80,25 @@ class MainActivity : AppCompatActivity() {
                 override fun onStopTrackingTouch(seekBar: SeekBar?) {}
             }
         )
-        
-        // Vincular servicio
+
         val intent = Intent(this, MusicPlayerService::class.java)
         bindService(intent, connection, Context.BIND_AUTO_CREATE)
-        
-        // Solicitar permiso
+        startService(intent)
+
         requestPermissionAndScan()
-        
-        // Actualizar progreso
         startProgressUpdate()
     }
-    
+
     private fun startProgressUpdate() {
-        CoroutineScope(Dispatchers.Main).launch {
+        progressJob?.cancel()
+        progressJob = CoroutineScope(Dispatchers.Main).launch {
             while (true) {
                 updateProgress()
-                kotlinx.coroutines.delay(1000)
+                delay(1000)
             }
         }
     }
-    
+
     private fun updateProgress() {
         musicService?.let { service ->
             val duration = service.getDuration()
@@ -112,18 +107,18 @@ class MainActivity : AppCompatActivity() {
                 val progress = (position * 100.0 / duration).toInt()
                 findViewById<SeekBar>(R.id.progressBar).progress = progress
                 findViewById<TextView>(R.id.timeText).text = 
-                    " / "
+                    "${formatTime(position)} / ${formatTime(duration)}"
             }
         }
     }
-    
+
     private fun formatTime(ms: Long): String {
         val seconds = ms / 1000
         val minutes = seconds / 60
         val secs = seconds % 60
         return String.format("%d:%02d", minutes, secs)
     }
-    
+
     private fun requestPermissionAndScan() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_AUDIO)
             != PackageManager.PERMISSION_GRANTED) {
@@ -136,7 +131,7 @@ class MainActivity : AppCompatActivity() {
             scanMusic()
         }
     }
-    
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -148,18 +143,18 @@ class MainActivity : AppCompatActivity() {
             scanMusic()
         }
     }
-    
+
     private fun scanMusic() {
         CoroutineScope(Dispatchers.IO).launch {
             val tracks = loadTracksFromDevice()
             currentTracks = tracks.toMutableList()
             withContext(Dispatchers.Main) {
                 trackAdapter.updateTracks(tracks)
-                Toast.makeText(this@MainActivity, "Se encontraron  canciones", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@MainActivity, "Se encontraron ${tracks.size} canciones", Toast.LENGTH_SHORT).show()
             }
         }
     }
-    
+
     private fun loadTracksFromDevice(): List<Track> {
         val tracks = mutableListOf<Track>()
         val collection = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
@@ -187,7 +182,7 @@ class MainActivity : AppCompatActivity() {
             val durationColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION)
             val yearColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.YEAR)
             val trackColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TRACK)
-            
+
             while (cursor.moveToNext()) {
                 tracks.add(Track(
                     id = cursor.getLong(idColumn),
@@ -210,39 +205,30 @@ class MainActivity : AppCompatActivity() {
         }
         return tracks
     }
-    
+
     private fun playTrack(track: Track) {
         musicService?.playTrack(track.path)
-        findViewById<TextView>(R.id.miniTitle).text = " - "
+        findViewById<TextView>(R.id.miniTitle).text = "${track.title} - ${track.artist}"
         findViewById<Button>(R.id.playPauseButton).text = "⏸"
     }
-    
-    private fun showEqualizerUI() {
-        val eq = musicService?.getEqualizerManager()
-        if (eq != null) {
-            // Mostrar presets
-            val presets = presetManager.getDefaultPresets()
-            val presetNames = presets.joinToString("\n") { it.name }
-            Toast.makeText(this, "Presets disponibles:\n", Toast.LENGTH_LONG).show()
-            
-            // Aplicar preset "Normal" por defecto
-            presetManager.savePreset(presets[0])
-        } else {
-            Toast.makeText(this, "Ecualizador no disponible", Toast.LENGTH_SHORT).show()
-        }
+
+    private fun openEqualizer() {
+        val intent = Intent(this, EqualizerActivity::class.java)
+        startActivity(intent)
     }
-    
+
     private fun showDSPUI() {
         val dsp = musicService?.getDSPManager()
         if (dsp != null) {
             dsp.enableAll()
-            Toast.makeText(this, "DSP activado: Bass, Virtualizer, Reverb", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "DSP activado", Toast.LENGTH_SHORT).show()
         } else {
             Toast.makeText(this, "DSP no disponible", Toast.LENGTH_SHORT).show()
         }
     }
-    
+
     override fun onDestroy() {
+        progressJob?.cancel()
         if (isBound) {
             unbindService(connection)
             isBound = false
