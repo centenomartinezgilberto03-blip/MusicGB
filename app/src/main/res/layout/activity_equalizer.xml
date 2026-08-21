@@ -2,7 +2,8 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#121212">
+    android:background="#121212"
+    android:fillViewport="true">
     
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,19 +21,38 @@
             android:gravity="center"
             android:padding="16dp"/>
         
-        <!-- Contenedor de bandas verticales -->
+        <!-- Texto de desplazamiento -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="← Desliza horizontalmente para ver todas las bandas →"
+            android:textSize="12sp"
+            android:textColor="#B3B3B3"
+            android:gravity="center"
+            android:padding="8dp"/>
+        
+        <!-- Contenedor de bandas con scroll horizontal -->
         <HorizontalScrollView
+            android:id="@+id/eqScrollView"
             android:layout_width="match_parent"
             android:layout_height="300dp"
-            android:scrollbars="horizontal">
+            android:scrollbars="horizontal"
+            android:fadeScrollbars="false"
+            android:scrollbarStyle="insideOverlay"
+            android:scrollbarThumbHorizontal="@color/musicgb_green"
+            android:scrollbarTrackHorizontal="#282828"
+            android:scrollbarSize="8dp"
+            android:overScrollMode="always"
+            android:background="#1A1A1A"
+            android:padding="8dp">
             
             <LinearLayout
                 android:id="@+id/eqBandsContainer"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
-                android:padding="8dp"
-                android:gravity="center_vertical"/>
+                android:gravity="center_vertical"
+                android:padding="8dp"/>
         </HorizontalScrollView>
         
         <!-- Presets -->
@@ -45,12 +65,18 @@
             android:textStyle="bold"
             android:padding="16dp"/>
         
-        <LinearLayout
-            android:id="@+id/presetContainer"
+        <HorizontalScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"/>
+            android:scrollbars="horizontal">
+            
+            <LinearLayout
+                android:id="@+id/presetContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"/>
+        </HorizontalScrollView>
         
         <!-- Controles adicionales -->
         <TextView
@@ -108,5 +134,16 @@
                 android:max="1000"
                 android:progress="0"/>
         </LinearLayout>
+        
+        <!-- Crédito -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Creado Por Gilbert Centeno"
+            android:textSize="14sp"
+            android:textColor="#1DB954"
+            android:gravity="center"
+            android:padding="16dp"
+            android:textStyle="italic"/>
     </LinearLayout>
 </ScrollView>

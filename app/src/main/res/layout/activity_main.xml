@@ -76,7 +76,6 @@
         android:padding="8dp"
         android:background="#282828">
         
-        <!-- Título -->
         <TextView
             android:id="@+id/miniTitle"
             android:layout_width="match_parent"
@@ -87,7 +86,6 @@
             android:maxLines="1"
             android:ellipsize="end"/>
         
-        <!-- Barra de progreso -->
         <SeekBar
             android:id="@+id/progressBar"
             android:layout_width="match_parent"
@@ -95,7 +93,6 @@
             android:max="100"
             android:progress="0"/>
         
-        <!-- Tiempo -->
         <TextView
             android:id="@+id/timeText"
             android:layout_width="match_parent"
@@ -105,7 +102,6 @@
             android:textColor="#B3B3B3"
             android:gravity="center"/>
         
-        <!-- Controles -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -121,6 +117,16 @@
                 android:textColor="#000000"
                 android:textSize="24sp"/>
         </LinearLayout>
+        
+        <!-- Crédito -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Creado Por Gilbert Centeno"
+            android:textSize="10sp"
+            android:textColor="#1DB954"
+            android:gravity="center"
+            android:paddingTop="4dp"/>
     </LinearLayout>
     
 </LinearLayout>
