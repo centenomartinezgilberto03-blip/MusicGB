@@ -31,6 +31,34 @@
             android:textColor="#000000"/>
     </LinearLayout>
     
+    <!-- Botones de EQ y DSP -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="8dp">
+        
+        <Button
+            android:id="@+id/eqButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Ecualizador"
+            android:background="#282828"
+            android:textColor="#FFFFFF"
+            android:layout_margin="4dp"/>
+        
+        <Button
+            android:id="@+id/dspButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Efectos DSP"
+            android:background="#282828"
+            android:textColor="#FFFFFF"
+            android:layout_margin="4dp"/>
+    </LinearLayout>
+    
     <!-- Lista de canciones -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/trackList"
@@ -43,30 +71,56 @@
     <LinearLayout
         android:id="@+id/miniPlayer"
         android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:orientation="horizontal"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:padding="8dp"
-        android:background="#282828"
-        android:gravity="center_vertical">
+        android:background="#282828">
         
+        <!-- Título -->
         <TextView
             android:id="@+id/miniTitle"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:text="Sin reproducción"
             android:textSize="14sp"
             android:textColor="#FFFFFF"
             android:maxLines="1"
             android:ellipsize="end"/>
         
-        <Button
-            android:id="@+id/playPauseButton"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:text="▶"
-            android:background="#1DB954"
-            android:textColor="#000000"/>
+        <!-- Barra de progreso -->
+        <SeekBar
+            android:id="@+id/progressBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="100"
+            android:progress="0"/>
+        
+        <!-- Tiempo -->
+        <TextView
+            android:id="@+id/timeText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="0:00 / 0:00"
+            android:textSize="12sp"
+            android:textColor="#B3B3B3"
+            android:gravity="center"/>
+        
+        <!-- Controles -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+            
+            <Button
+                android:id="@+id/playPauseButton"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:text="▶"
+                android:background="#1DB954"
+                android:textColor="#000000"
+                android:textSize="24sp"/>
+        </LinearLayout>
     </LinearLayout>
     
 </LinearLayout>
